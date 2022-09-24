@@ -1,1 +1,84 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
+public class Main {
+
+    public static ArrayList<Integer> findAnagrams(int n, String str1, int m, String str2) 
+        {
+             if(m > n) return new ArrayList<>();
+        
+             HashMap<Character, Integer> str2FreqMap = new HashMap<>();
+             for(int i = 0; i < m; i++)
+             {
+                 char ch = str2.charAt(i);
+                 str2FreqMap.put(ch, str2FreqMap.getOrDefault(ch, 0) + 1);
+             }
+
+             HashMap<Character, Integer> windowFreqMap = new HashMap<>();
+                for(int i = 0; i < m; i++) 
+                {
+                    char ch = str1.charAt(i);
+                    windowFreqMap.put(ch, windowFreqMap.getOrDefault(ch, 0) + 1);
+                }
+
+                int incIdx = m;
+                int excIdx = 0;
+
+                ArrayList<Integer> ans = new ArrayList<>();
+
+                while(incIdx < n)
+                   {
+                            if(str2FreqMap.equals(windowFreqMap) == true)
+                            {
+                                ans.add(excIdx); 
+                            }
+
+                            char excChar = str1.charAt(excIdx);
+                            if(windowFreqMap.get(excChar) == 1) 
+                            {
+                                windowFreqMap.remove(excChar);
+                            }
+                            else
+                            {
+                                windowFreqMap.put(excChar, windowFreqMap.get(excChar) - 1);
+                            }
+
+                            char incChar = str1.charAt(incIdx);
+                            windowFreqMap.put(incChar, windowFreqMap.getOrDefault(incChar, 0) + 1);
+
+                            incIdx++;
+                            excIdx++;
+                }
+
+        if(str2FreqMap.equals(windowFreqMap) == true) 
+        {
+            ans.add(excIdx);
+        }
+
+        return ans;
+    }
+    public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        String str1 = scn.next(); //s
+        int m = scn.nextInt();
+        String str2 = scn.next(); //p
+
+        ArrayList<Integer> ans = findAnagrams(n, str1, m, str2);
+            if (ans.isEmpty())
+            {
+                    ans.add(-1);
+                    System.out.println(ans.get(0));             
+            }
+            else
+            {
+                    for (Integer i : ans) 
+                        {        
+                                System.out.print(i + " ");
+                        }
+            }
+
+        scn.close();
+    }
+}
